@@ -224,7 +224,7 @@ And we got root !!!!
 
 ![](/random/tenor.gif)
 
-That's for all for today guys :grimacing:<br/>
+That's all for today guys :grimacing:<br/>
 I hope you would enjoy this writeup..!!
 <br/>
 [HOME](/)
