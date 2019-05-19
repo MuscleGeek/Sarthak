@@ -2,7 +2,7 @@
 
 I am a security researcher who loves to automate and upload them on  [GitHub](https://github.com/geek-repo/) and I love to do capture the flag challeneges from Hack the Box and Root-me.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Whenever you commit to this repository, GitHub Pages will run [Jekyll](second.md) to rebuild the pages in your site, from the content in your Markdown files.
 
 ### Markdown
 
