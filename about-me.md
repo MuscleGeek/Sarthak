@@ -13,6 +13,16 @@ I am a security researcher who loves to automate and upload them on  [GitHub](ht
   - [Md5Smasher](https://github.com/geek-repo/Md5-Smasher) : Crack md5 hashes on realtime basis(rainbow tables) (API)
   - [Hexor-Trexor](https://github.com/geek-repo/Hexor-Trexor): Decrypt md5,sha1,sha256,sha512 on rainbow table basis (Program)
 
-![](/random/tenor.gif)
+## Programming Languages
+  - Python
+  - C
+  - C++
+  - Asm(x86)
+
+## Contact Me
+  - [LinkedIn](https://linkedin.com/in/sarthaksaini899/)
+  - [Twitter](https://twitter.com/Sarthak_0000)
+  
+ 
 <br/>
-[home](/)
+[HOME](/)
