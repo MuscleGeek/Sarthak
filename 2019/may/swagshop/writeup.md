@@ -34,9 +34,7 @@ Read data files from: /usr/bin/../share/nmap
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 42.42 seconds
 ```
-We have port 80 opened let's see what we got there ...
-
-
+We have port 80 opened let's see what we got there ...<br>
 ![](Selection_007.png)
 
 
@@ -180,7 +178,7 @@ www-data@swagshop:/$
 We can run vi with everything inside html so what we will do is we will make a symlink of passwd file and we will place a openssl hash at root section to login !!
 
 
-We have created a symlink ...
+We have created a symlink ...<br>
 ```
 www-data@swagshop:/$ ln -s /etc/passwd /var/www/html/
 ```
@@ -211,7 +209,7 @@ And we got root !!!!
 
 <<gif>>
 
-That's for all for today guys :grimacing:
+That's for all for today guys :grimacing:<br>
 I hope you would enjoy this writeup..!!
 
 
