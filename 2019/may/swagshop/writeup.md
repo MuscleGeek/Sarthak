@@ -36,20 +36,20 @@ Nmap done: 1 IP address (1 host up) scanned in 42.42 seconds
 ```
 We have port 80 opened let's see what we got there ...
 
-<<picture 007>>
+![](Selection_007.png)
 
 Here we have Magento platform running,So after googling of 15 min we found a [exploit](https://www.exploit-db.com/exploits/37977) which will create a admin account for us,So let's quickly download and run this exploit(ip address has been already changed inside the exploit)
 
-<<picture 008>>
+![](Selection_008.png)
 
 hmm...it doesn't work ..after reviewing the source code of exploit program was looking for the '/admin/' path let's first find it manually...
 
-<picture 009>
+![](Selection_009.png)
 
 Notice the url here it's weird that it has http://10.10.10.140/index.php/customer/
 So what i did here was replaced /customer/ with /admin/ and now we can see the admin panel
 
-<<picture 10>>
+![](Selection_010.png)
 
 Now we will modify the exploit and then run
 
@@ -95,42 +95,42 @@ else:
 ```
 Now let's seee
 
-<<picture 11>>
+![](Selection_011.png)
 
 we have creds now after logging in i looked up for exploits to get shell and found one [video](https://www.youtube.com/watch?v=pDKb_LOoDes) on youtube in which that person has uploaded shell by using the filesystem section but then i realised we don't have that section 
 
 So after googling around, I found the [extension](https://pluginarchive.com/magento/magpleasure_filesystem) and way to upload it ...
 
 
-<<picture 12>>
+![](Selection_012.png)
 
 So after clicking it we got the portal to login
 
-<<picture 13>>
+![](Selection_013.png)
 
 we will use same creds from exploit *forme:forme*
 
-<<picture 14>>
+![](Selection_014.png)
 
 We will upload the filesystem extension 
 
-<<picture 15>>
+![](Selection_015.png)
 
 Now we will go back to admin panel by click on this section
 
-<<picture 16>>
+![](Selection_016.png)
 
 go to System -->File system-->IDE
 
-<<picture 17>>
+![](Selection_017.png)
 
 Open the get.php and replace with the php reverse shell which i got from [here](http://pentestmonkey.net/tools/web-shells/php-reverse-shell)
 
-<<picture 18>>
+![](Selection_018.png)
 
 We got the shell when we opened this link [http://10.10.10.140](http://10.10.10.140)
 
-<<picture 19>>
+![](Selection_019.png)
 
 now we will first make the shell fully interactive
 
@@ -181,7 +181,7 @@ www-data@swagshop:/$ ln -s /etc/passwd /var/www/html/
 
 Now we have created a password hash for root as 'pass123'
 
-<<picture21>>
+![](Selection_021.png)
 
 Open passwd file with vi
 ```
@@ -189,7 +189,7 @@ www-data@swagshop:/$ sudo /usr/bin/vi /var/www/html/passwd
 ```
 Placed the hash 
 
-<<picture 22>>
+![](Selection_022.png)
 
 Now login as root
 
@@ -201,9 +201,11 @@ uid=0(root) gid=0(root) groups=0(root)
 root@swagshop:/# 
 ```
 
-<<picture 23>>
+And we got root !!!!
 
-That's for all for today guys
+<<gif>>
+
+That's for all for today guys :grimacing:
 I hope you would enjoy this writeup..!!
 
 
