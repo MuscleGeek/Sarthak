@@ -135,7 +135,7 @@ We will upload the filesystem extension
 
 ![](Selection_015.png)
 
-Now we will go back to admin panel by click on this section
+Now we will go back to admin panel by click on *Return to Admin* section
 
 ![](Selection_016.png)
 
