@@ -1,5 +1,3 @@
-![sarthak logo](Selection_006.png)
-
 ## Tutorials or Tricks
 
  *>>> COMING SOON <<<*
