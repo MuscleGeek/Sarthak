@@ -222,11 +222,11 @@ root@swagshop:/#
 
 And we got root !!!!
 
-<<gif>>
+![](/random/tenor.gif)
 
 That's for all for today guys :grimacing:<br/>
 I hope you would enjoy this writeup..!!
-</br>
-[home](/)
+<br/>
+[HOME](/)
 
 
