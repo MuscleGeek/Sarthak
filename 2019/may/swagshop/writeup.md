@@ -36,15 +36,21 @@ Nmap done: 1 IP address (1 host up) scanned in 42.42 seconds
 ```
 We have port 80 opened let's see what we got there ...
 
+
 ![](Selection_007.png)
+
 
 Here we have Magento platform running,So after googling of 15 min we found a [exploit](https://www.exploit-db.com/exploits/37977) which will create a admin account for us,So let's quickly download and run this exploit(ip address has been already changed inside the exploit)
 
+
 ![](Selection_008.png)
+
 
 hmm...it doesn't work ..after reviewing the source code of exploit program was looking for the '/admin/' path let's first find it manually...
 
+
 ![](Selection_009.png)
+
 
 Notice the url here it's weird that it has http://10.10.10.140/index.php/customer/
 So what i did here was replaced /customer/ with /admin/ and now we can see the admin panel
