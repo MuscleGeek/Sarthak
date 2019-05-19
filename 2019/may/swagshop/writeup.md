@@ -147,7 +147,7 @@ Open the get.php and replace with the php reverse shell which i got from [here](
 
 ![](Selection_018.png)
 
-We got the shell when we opened this link [http://10.10.10.140](http://10.10.10.140)
+We got the shell when we opened this link [http://10.10.10.140/get.php](http://10.10.10.140/get.php)
 
 ![](Selection_019.png)
 
