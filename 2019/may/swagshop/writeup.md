@@ -41,7 +41,14 @@ We have port 80 opened let's see what we got there ...<br/>
 Here we have Magento platform running,So after googling of 15 min we found a [exploit](https://www.exploit-db.com/exploits/37977) which will create a admin account for us,So let's quickly download and run this exploit(ip address has been already changed inside the exploit)
 
 
-![](Selection_008.png)
+```
+[sarthak@sarthak swagshop]$ python2 exp.py 
+/usr/lib/python2.7/site-packages/requests/__init__.py:91: RequestsDependencyWarning: urllib3 (1.25.2) or chardet (3.0.4) doesn't match a supported version!
+  RequestsDependencyWarning)
+DID NOT WORK
+[sarthak@sarthak swagshop]$ 
+
+```
 
 
 hmm...it doesn't work ..after reviewing the source code of exploit program was looking for the '/admin/' path let's first find it manually...
@@ -99,7 +106,15 @@ else:
 ```
 Now let's seee
 
-![](Selection_011.png)
+```
+[sarthak@sarthak swagshop]$ python2 exp.py 
+/usr/lib/python2.7/site-packages/requests/__init__.py:91: RequestsDependencyWarning: urllib3 (1.25.2) or chardet (3.0.4) doesn't match a supported version!
+  RequestsDependencyWarning)
+WORKED
+Check http://10.10.10.140/admin with creds forme:forme
+[sarthak@sarthak swagshop]$ 
+
+```
 
 we have creds now after logging in i looked up for exploits to get shell and found one [video](https://www.youtube.com/watch?v=pDKb_LOoDes) on youtube in which that person has uploaded shell by using the filesystem section but then i realised we don't have that section 
 
