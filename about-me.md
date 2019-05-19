@@ -18,6 +18,13 @@ I am a security researcher who loves to automate and upload them on  [GitHub](ht
   - C
   - C++
   - Asm(x86)
+  
+## Interests
+  - Automation
+  - Reverse Engineering
+  - Network Pentesting
+  - Exploit Development
+  - Anime :laughing:
 
 ## Contact Me
   - [LinkedIn](https://linkedin.com/in/sarthaksaini899/)
