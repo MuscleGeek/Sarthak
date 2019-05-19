@@ -1,4 +1,4 @@
-# Write-up of swagshop HTB
+# Write-up of SwagShop HTB
 
 We will start off with nmap scan of the ip 10.10.10.140 
 
