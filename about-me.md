@@ -27,8 +27,8 @@ I am a security researcher who loves to automate and upload them on  [GitHub](ht
   - Anime :laughing:
 
 ## CTF SITES
- - HACK THE BOX <br/>
- ![](https://www.hackthebox.eu/badge/image/9112)
+ - [HACK THE BOX](https://www.hackthebox.eu/home/users/profile/9112)
+ - [ROOT-ME](https://www.root-me.org/sarthak-saini)
 
 ## Contact Me
   - [LinkedIn](https://linkedin.com/in/sarthaksaini899/)
