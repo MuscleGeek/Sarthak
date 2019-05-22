@@ -35,5 +35,4 @@ I am a security researcher who loves to automate and upload them on  [GitHub](ht
   - [Twitter](https://twitter.com/Sarthak_0000)
   
  
-<br/>
-[HOME](/)
+
