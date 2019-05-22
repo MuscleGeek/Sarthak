@@ -226,7 +226,5 @@ And we got root !!!!
 
 That's all for today guys :grimacing:<br/>
 I hope you would enjoy this writeup..!!
-<br/>
-[HOME](/)
 
 
