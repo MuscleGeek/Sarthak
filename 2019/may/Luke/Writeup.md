@@ -237,16 +237,20 @@ Now we have a whole new set of credentials so let's try these on management page
 
 ![](Selection_011.png)
 <br/>
+
 We got in and now let's check these configs...<br/>
+
 ![](Selection_012.png)
+
 <br/>
 we got some config file of ```Ajenti``` service which is running at port 8000 and in the same file we had credentials for agenti<br/>
+
 ```
 username:-root
 password:-KpMasng6S5EtTy9Z
 ```
 
-## Logging in to Agenti cms
+## Logging in to Ajenti cms
 
 ![](Selection_013.png)
 
