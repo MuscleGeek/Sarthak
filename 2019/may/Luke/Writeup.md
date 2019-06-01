@@ -236,8 +236,8 @@ Now we have a whole new set of credentials so let's try these on management page
 ## Access to Management
 
 ![](Selection_011.png)
-
-We got in and now let's check these configs...
+<br/>
+We got in and now let's check these configs...<br/>
 ![](Selection_012.png)
 <br/>
 we got some config file of ```Ajenti``` service which is running at port 8000 and in the same file we had credentials for agenti<br/>
@@ -258,7 +258,9 @@ Now we have logged in...
 we will head to **terminal** section...
 ![](Selection_014.png)
 <br/>
+
 click on **+ New** To start a new Terminal session 
+
 <br/>
 ![](Selection_015.png)
 <br/>
