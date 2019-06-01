@@ -117,7 +117,7 @@ GENERATED WORDS: 4612
 <br/>
 management seems interesting Let's see what it has ....
 
-picture 007
+![](Selection_007.png)
 
 It requires credentials let's keep it for future..
 <br/>
@@ -208,7 +208,7 @@ DOWNLOADED: 4612 - FOUND: 3
 <br/>
 we can see login section from where we got our token and we can see users so let's visit users with burp + token...
 ## More Credentials 
-picture 009
+![](Selection_009.png)
 
 Wow so we got users and their roles 
 
@@ -219,7 +219,7 @@ Wow so we got users and their roles
 
 After poking around a bit more i figured out we can use name as a directory like ```http://10.10.10.137:3000/users/Admin/```<br/>
 
-picture 010
+![](Selection_010.png)
 
 So by doing the same step and replacing the names i got these credentials
 
@@ -235,10 +235,10 @@ Now we have a whole new set of credentials so let's try these on management page
 
 ## Access to Management
 
-<picture 11>
+![](Selection_011.png)
 
 We got in and now let's check these configs...
-<picture 12>
+![](Selection_012.png)
 <br/>
 we got some config file of ```Ajenti``` service which is running at port 8000 and in the same file we had credentials for agenti<br/>
 ```
