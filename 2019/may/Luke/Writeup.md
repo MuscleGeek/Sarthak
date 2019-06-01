@@ -154,6 +154,9 @@ So we got :-<br/>
 username:root
 password:Zk6heYCyv6ZE9Xcg
 ```
+<br/>
+## Grabbed Token
+
 I tried these credentials on management didn't worked so now let's enumerate port 3000 which is node js framework and it works on JWT so it will require a token and [this](https://medium.com/dev-bits/a-guide-for-adding-jwt-token-based-authentication-to-your-single-page-nodejs-applications-c403f7cf04f4) helped alot to get me a token
 
 so building it with curl<br/>
@@ -164,7 +167,7 @@ curl -X POST http://10.10.10.137:3000/login -H 'Content-Type: application/json' 
 <br/>
 Output
 ```
-{"success":true,"message":"Authentication successful!","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTU5NDA2MDAzLCJleHAiOjE1NTk0OTI0MDN9.s5A4cg4X7PJCuKScwF3oSsi8Rln9vCJ1at0FT4zl40w"}
+{"success":true,"message":"Authentication successful!","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTU5NDA2MjkyLCJleHAiOjE1NTk0OTI2OTJ9.UkWbOSrPqMVTVMpvbwbTetQUAAs3wKohTS7S7kLfoBY"}
 ```
 <br/>
 We have a token now we can use it with ``` Authorization: Bearer <token>``` in our burp on port 3000 <br/>
@@ -198,6 +201,45 @@ DOWNLOADED: 4612 - FOUND: 3
 ```
 <br/>
 we can see login section from where we got our token and we can see users so let's visit users with burp + token...
+## More Credentials 
+picture 009
 
+Wow so we got users and their roles 
+
+```
+[{"ID":"1","name":"Admin","Role":"Superuser"},{"ID":"2","name":"Derry","Role":"Web Admin"},{"ID":"3","name":"Yuri","Role":"Beta Tester"},{"ID":"4","name":"Dory","Role":"Supporter"}]
+```
+<br/>
+
+After poking around a bit more i figured out we can use name as a directory like ```http://10.10.10.137:3000/users/Admin/```<br/>
+
+picture 010
+
+So by doing the same step and replacing the names i got these credentials
+
+```
+{"name":"Derry","password":"rZ86wwLvx7jUxtch"}
+{"name":"Admin","password":"WX5b7)>/rp$U)FW"}
+{"name":"Yuri","password":"bet@tester87"}
+{"name":"Dory","password":"5y:!xa=ybfe)/QD"}
+```
+<br/>
+
+Now we have a whole new set of credentials so let's try these on management page now ...so i will try ```Derry``` first because he has Web Admin role...
+
+## Access to Management
+
+<picture 11>
+
+We got in and now let's check these configs...
+<picture 12>
+<br/>
+we got some config file of ```Ajenti``` service which is running at port 8000 and in the same file we had credentials for agenti<br/>
+```
+username:-root
+password:-KpMasng6S5EtTy9Z
+```
+
+## Logging in to Agenti cms
 
 
