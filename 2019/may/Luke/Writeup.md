@@ -73,7 +73,8 @@ ftp> get for_Chihiro.txt
 ftp>
 ```
 <br/>
-So we have got a file 'for_Chihiro.txt' Let's see What this has...
+So we have got a file 'for_Chihiro.txt' Let's see What this has...<br/>
+
 ```
 [sarthak@sarthak ~]$ cat for_Chihiro.txt 
 Dear Chihiro !!
