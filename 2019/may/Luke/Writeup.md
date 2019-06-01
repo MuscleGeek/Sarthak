@@ -248,4 +248,27 @@ password:-KpMasng6S5EtTy9Z
 
 ## Logging in to Agenti cms
 
+![](Selection_013.png)
+
+<br/>
+Now we have logged in...
+
+## Gaining Root and flag
+
+we will head to **terminal** section...
+![](Selection_014.png)
+<br/>
+click on **+ New** To start a new Terminal session 
+<br/>
+![](Selection_015.png)
+<br/>
+
+And as you can see we already got root shell and we got the flag 
+![](rickandmorty.gif)
+
+<br/>
+That's all for today guys, If you enjoyed today's writeup then stay tuned for more :bowtie:
+
+
+
 
