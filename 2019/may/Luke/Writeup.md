@@ -260,6 +260,7 @@ Now we have logged in...
 ## Gaining Root and flag
 
 we will head to **terminal** section...
+<br/>
 ![](Selection_014.png)
 <br/>
 
