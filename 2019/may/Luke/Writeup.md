@@ -42,7 +42,9 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 202.91 seconds
 ```
 <br/>
-We have Ftp opened so first let's enumerate that 
+We have Ftp opened so first let's enumerate that <br/>
+
+
 ```
 [sarthak@sarthak ~]$ ftp 10.10.10.137
 Connected to 10.10.10.137.
