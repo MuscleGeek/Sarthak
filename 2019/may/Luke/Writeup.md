@@ -176,7 +176,7 @@ Output
 ```
 
 <br/>
-We have a token now we can use it with   ``` Authorization: Bearer <token>```   in our burp on port 3000 <br/>
+We have a token now we can use it with   ** Authorization: Bearer <token> **  in our burp on port 3000 <br/>
 
 Before that we shall run dirbuster to see any directories or files which could be helpful...
 
