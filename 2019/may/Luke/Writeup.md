@@ -165,11 +165,16 @@ so building it with curl<br/>
 curl -X POST http://10.10.10.137:3000/login -H 'Content-Type: application/json' -d '{"username":"admin", "password":"Zk6heYCyv6ZE9Xcg"}'
 ```
 <br/>
+
 Output
+
 <br/>
+
+
 ```
 {"success":true,"message":"Authentication successful!","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTU5NDA2MjkyLCJleHAiOjE1NTk0OTI2OTJ9.UkWbOSrPqMVTVMpvbwbTetQUAAs3wKohTS7S7kLfoBY"}
 ```
+
 <br/>
 We have a token now we can use it with   ``` Authorization: Bearer <token>```   in our burp on port 3000 <br/>
 
