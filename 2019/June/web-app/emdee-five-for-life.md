@@ -4,7 +4,7 @@ Welcome Readers, Today we will be doing the hackthebox(HTB) challenge
 
 ## Starting point...
 
-![](Selection_008.png)
+![](Selection_008.png =150x)
 <br/>
 our only task is to submit the string  after converting it to md5 hash ...but when i tried to submit i got this...
 
