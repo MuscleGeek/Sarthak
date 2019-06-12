@@ -80,5 +80,8 @@ Now time to run the script and get the flag :)
 
 ![](Selection_010.png)
 
+```
+syntax :- python3 emdee.py
+```
 <br/>
 There we go we got our flag ...sorry for bad regex lol i am new at this, anyways if you guys like my writeup stay tuned will post more :neckbeard:
