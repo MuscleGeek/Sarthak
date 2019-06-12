@@ -4,11 +4,11 @@ Welcome Readers, Today we will be doing the hackthebox(HTB) challenge
 
 ## Starting point...
 
-<picture 008>
+![](Selection_008.png)
 <br/>
 our only task is to submit the string  after converting it to md5 hash ...but when i tried to submit i got this...
 
-<picture 009>
+![](Selection_009.png)
 <br/>
 Yup *Too slow*
 
@@ -21,7 +21,7 @@ Let's automate this and build a python script for it and i will be using:-
 
 ## Source code
 
-```
+```html
 <html>
 <head>
 <title>emdee five for life</title>
@@ -78,7 +78,7 @@ print(out.text)
 ## Getting the flag 
 Now time to run the script and get the flag :)
 
-<picture 10>
+![](Selection_010.png)
 
 <br/>
 There we go we got our flag ...sorry for bad regex lol i am new at this, anyways if you guys like my writeup stay tuned will post more :neckbeard:
