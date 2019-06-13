@@ -62,11 +62,14 @@ Now i found a blind time based sql injection whose exploit code is available
 <br/>
 <picture 007>
 <br/>
+
 ```
 python2 exp.py -u http://10.10.10.138/writeup/
 ```
+
 I extracted the decrypt logic from the exploit and saw that before converting to md5 we have to concat it with salt so the final exploit code i created for finding password is
 <br/>
+
 ```python
 import hashlib
 
@@ -88,6 +91,7 @@ def crack_password():
 
 crack_password()
 ```
+
 <br/>
 The password extracted from the wordlist was :- *raykayjay9*
 
