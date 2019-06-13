@@ -93,7 +93,7 @@ crack_password()
 ```
 
 <br/>
-The password extracted from the wordlist was `raykayjay9`
+The password extracted from the wordlist was _raykayjay9_
 
 ## Logging into ssh
 
@@ -132,8 +132,7 @@ we can see  `run-parts`  is being executed and if we check the permissions of  `
 <br/>
 <picture 015>
 <br/>
-our user is in the same group as of  `/usr/local/sbin`  so that means we can write stuff inside the  `sbin`  folder, So we will write a binary in /tmp folder with our malicious payload and give it permissions to execute and will copy it to the  `sbin`  folder...
-<br/>
+our user is in the same group as of  _/usr/local/sbin_  so that means we can write stuff inside the  _sbin_  folder, So we will write a binary in /tmp folder with our malicious payload and give it permissions to execute and will copy it to the  _sbin_  folder...
 The payload will be..
 
 ```bash
