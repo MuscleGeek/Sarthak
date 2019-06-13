@@ -60,7 +60,9 @@ Now i found a blind time based sql injection whose exploit code is available
  - [here](https://www.exploit-db.com/exploits/46635)
 
 <br/>
+
 ![](Selection_007.png)
+
 <br/>
 
 ```
@@ -101,7 +103,9 @@ So now we have credentials
  - username:- *jkr*
  - password:- *raykayjay9*
 <br/> 
+
 ![](Selection_012.png)
+
 <br/>
 
 ## Privesc 
