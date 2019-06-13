@@ -112,14 +112,17 @@ Now if a user logged in by ssh we will see some commands being executed in the s
 <picture 014>
 <br/>
 The command was ...
+
 ```
 sh -c /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin run-parts --lsbsysinit /etc/update-motd.d > /run/motd.dynamic.new
 ```
+
 if we break this command into chunks and try to understand what it's doing is setting up the PATH variable in which we can see `/usr/local/sbin` was at top which means it will be given highest priority while looking for any binary by the operating system so... 
 
 ```
 run-parts --lsbsysinit /etc/update-motd.d > /run/motd.dynamic.new
 ```
+
 we can see `run-parts` is being executed and if we check the permissions of `/usr/local/sbin` we will notice that..
 
 <br/>
@@ -128,10 +131,12 @@ we can see `run-parts` is being executed and if we check the permissions of `/us
 our user is in the same group as of `/usr/local/sbin` so that means we can write stuff inside the `sbin` folder, So we will write a binary in /tmp folder with our malicious payload and give it permissions to execute and will copy it to the `sbin` folder...
 <br/>
 The payload will be..
+
 ```bash
 #!/bin/bash
 echo "root:pwned@123"|chpasswd
 ```
+
 This will change the password of root to `pwned@123` so let's try this...
 <br/>
 <picture 016>
