@@ -112,12 +112,16 @@ So now we have credentials
 
 Downloading pspy64 to snoop on processes
 <br/>
+
 ![](Selection_013.png)
+
 <br/>
 
 Now if a user logged in by ssh we will see some commands being executed in the server which can be seen by pspy64 binary output
 <br/>
+
 ![](Selection_014.png)
+
 <br/>
 The command was ...
 
@@ -149,16 +153,22 @@ echo "root:pwned@123"|chpasswd
 
 This will change the password of root to `pwned@123` so let's try this...
 <br/>
+
 ![](Selection_016.png)
+
 <br/>
 Now we have copied the payload let's quickly log out and login back to ssh and test the credentials...
 <br/>
+
 ![](Selection_017.png)
+
 <br/>
 
 And we rooted this box ...interesting machine it was,<br/>
 <br/>
+
 ![](meme.gif)
+
 <br/>  
 If you guys liked this writeup of writeup lol stay tuned :)
 
