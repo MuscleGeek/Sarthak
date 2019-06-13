@@ -130,7 +130,9 @@ run-parts --lsbsysinit /etc/update-motd.d > /run/motd.dynamic.new
 we can see  `run-parts`  is being executed and if we check the permissions of  `/usr/local/sbin`  we will notice that..
 
 <br/>
+
 ![](Selection_015.png)
+
 <br/>
 our user is in the same group as of  `/usr/local/sbin`  so that means we can write stuff inside the  `sbin`  folder, So we will write a binary in /tmp folder with our malicious payload and give it permissions to execute and will copy it to the  `sbin`  folder...
 <br/>
