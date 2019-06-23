@@ -19,6 +19,8 @@ I am a security researcher who loves to automate and upload them on  [GitHub](ht
   - C
   - C++
   - Asm(x86)
+  - PHP
+  - Javascript
   
 ## Interests
   - Automation
