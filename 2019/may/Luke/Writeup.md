@@ -1,6 +1,10 @@
 ## Luke Writeup
 
-Hey Guys how are you all,Today we will be doing Luke from HackTheBox This machine has lot's enumeration to get user and credentials and it took me hours to realise that I missed lot's of important link in gobuster so have to resolve it to dirb<br/>
+Hey Guys how are you all,Today we will be doing Luke from HackTheBox
+
+![](logo.png)
+<br/>
+This machine has lot's enumeration to get user and credentials and it took me hours to realise that I missed lot's of important link in gobuster so have to resolve it to dirb<br/>
 Let's get started with a nmap scan
 
 ```
