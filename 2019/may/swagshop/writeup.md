@@ -1,5 +1,8 @@
 # Write-up of SwagShop HTB
+Hey Guys,Today we will be doing Swagshop from HackTheBox
 
+![](logo.png)
+<br/>
 We will start off with nmap scan of the ip 10.10.10.140 
 
 ```
