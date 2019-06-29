@@ -233,6 +233,7 @@ root
 
  ```
  Hooray !!! We rooted it 
+ <br/>
  ![](meme.gif)
  <br/>
 This was a good and straight forward machine,
