@@ -43,7 +43,9 @@ We have 3 services running so let's start enumerating the port 80 first...
 
 ## Webserver Enumeration
 <br/>
-<selection 007>
+
+![](Selection_007.png)
+
 <br/>
 So we have a image only so let's download it and analyse it first...
 
@@ -71,7 +73,9 @@ So after a quick google i found that clave means key but we will just keep it as
 On port 9200 Elastic Search is running so let's quickly find out all the indices and their contents for that i used [this](https://www.bmc.com/blogs/elasticsearch-commands/) cheatsheet..
 
 <br/>
-<selection 008>
+
+![](Selection_008.png)
+
 <br/>
 
 We got 3 indices so from which ```.kibana``` is the default of elastic search so we will enumerate b/w  ```bank``` and ```quotes``` 
@@ -81,7 +85,9 @@ We got 3 indices so from which ```.kibana``` is the default of elastic search so
 Let's see all the content of ```quotes``` index first using ```http://10.10.10.115:9200/quotes/_search/?size=1000```
 
 <br/>
-<selection 009>
+
+![](Selection_009.png)
+
 <br/>
 We got this data and from here if we search the key or *clave* in spanish we will find 2 strings...
 
@@ -315,6 +321,8 @@ uid=0(root) gid=0(root) grupos=0(root) contexto=unconfined_u:unconfined_r:unconf
 [root@haystack ~]#
 ```
 <br/>
-<meme.gif>
+
+![](meme.gif)
+
 <br/>
-Finally we did it ...this ctf was really a nice one i enjoyed it well mostly because i haved used *ELK* a.k.a *elasticsearch-logstash-kibana* in my project
+Finally we did it ...this ctf was really a nice one i enjoyed it well mostly because i haved used *ELK* a.k.a *elasticsearch-logstash-kibana* in my project ..Stay tuned for more :)
