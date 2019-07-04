@@ -2,7 +2,9 @@
 
 Hey Guys, Today we will be doing Haystack from HackTheBox
 <br/>
-<<logo.png>>
+
+![](logo.png)
+
 <br/>
 
 ## NMAP Scan
