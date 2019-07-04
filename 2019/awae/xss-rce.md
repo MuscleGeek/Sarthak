@@ -140,7 +140,7 @@ We shall see which file is handling those comments and to see that i will interc
 <br/>
 <<selection 008>>
 <br/>
-File which is handling the comments is ```post_comment.php``` So let's analyse it...
+File which is handling the comments is   ```post_comment.php```   So let's analyse it...
 
 ### post_comment.php
 
@@ -197,3 +197,92 @@ Where the variables are the values which were passed from the comment section...
 ```
 title=test&author=sarthak&text=hello+world++++++++&submit=Submit
 ```
+Now we know what ```find``` function does so we shall look at ```add_comment()``` function
+
+**add_comment function**
+
+```php
+function add_comment() {
+    $sql  = "INSERT INTO comments (title,author, text, post_id) values ('";
+    $sql .= mysql_real_escape_string($_POST["title"])."','";
+    $sql .= mysql_real_escape_string($_POST["author"])."','";
+    $sql .= mysql_real_escape_string($_POST["text"])."',";
+    $sql .= intval($this->id).")";
+    $result = mysql_query($sql);
+    echo mysql_error(); 
+  }
+```
+From Looking at the snippet we can see the values which were accepted from POST request are directly being stored in the database without any checks, Let's verify from logging into the mysql ...
+
+***Commands Used***
+```
+sudo su
+mysql
+use blog;
+select * from comments;
+```
+**OUTPUT**
+
+```
+mysql> select * from comments;
++----+-------+---------------------+---------+-----------+---------+
+| id | title | text                | author  | published | post_id |
++----+-------+---------------------+---------+-----------+---------+
+|  1 | test  | hello world         | sarthak | NULL      |       1 |
++----+-------+---------------------+---------+-----------+---------+
+1 row in set (0.00 sec)
+```
+We can see the data being stored so let's try to insert some javascript values ```<script>document.cookie</script>```
+<br/>
+<<selection 009>>
+<br/>
+
+**OUTPUT**
+```
+mysql> select * from comments;
++----+-------+----------------------------------+---------+-----------+---------+
+| id | title | text                             | author  | published | post_id |
++----+-------+----------------------------------+---------+-----------+---------+
+|  1 | test  | hello world                      | sarthak | NULL      |       1 |
+|  2 | test  | <script>document.cookie</script> | sarthak | NULL      |       1 |
++----+-------+----------------------------------+---------+-----------+---------+
+2 rows in set (0.00 sec)
+```
+
+Awesome we can insert anything inside it but we shall how this data will be printed on the screen ...For that we shall look again at ```post.php``` snippet 
+
+```php
+<?php
+  $site = "PentesterLab vulnerable blog";
+  require "header.php";
+  $post = Post::find(intval($_GET['id']));
+?>
+  <div class="block" id="block-text">
+    <div class="secondary-navigation">
+      <div class="content">
+      <?php 
+            echo $post->render_with_comments(); 
+      ?> 
+     </div>
+
+      <form method="POST" action="/post_comment.php?id=<?php echo htmlentities($_GET['id']); ?>"> 
+        Title: <input type="text" name="title" / ><br/>
+        Author: <input type="text" name="author" / ><br/>
+        Text: <textarea name="text" cols="80" rows="5">
+        </textarea><br/>
+        <input type="submit" name="submit" / >
+      </form> 
+    </div>
+
+  </div>
+
+
+<?php
+
+  require "footer.php";
+?>
+```
+
+Notice this part ```code:-echo $post->render_with_comments(); ``` 
+
+There's another function in ```classes/post.php``` named ```render_with_comments()``` let's analyse it
