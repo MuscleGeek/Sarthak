@@ -373,3 +373,12 @@ def servers(port):
 ```
 
 In this function i have done some horrible regex to filter out the cookie and return it back to the ```cookie``` variable used in the ```trigger function``` and later on it will be used to login in the admin panel by using the ```login_admin()``` function.
+
+But for now we will just login by intercepting the request by burpsuite and changing the cookies...
+
+<br/>
+<<selection 011>>
+<br />
+
+Now that we have logged in as admin and we are at ```http://192.168.0.5/admin/index.php``` page so let's look into the source code of pages inside the ```admin``` directory one by one...
+
