@@ -51,7 +51,7 @@ We have 3 services running so let's start enumerating the port 80 first...
 <br/>
 So we have a image only so let's download it and analyse it first...
 
-#### Clues in image
+#### Findings in image
 
 We did strings on the image and find a base64 in it
 ```
@@ -119,9 +119,7 @@ uid=1000(security) gid=1000(security) grupos=1000(security) contexto=unconfined_
 [security@haystack ~]$ 
 ```
 
-## Pivoting to Kibana
-
-So i executed this command ```ps aux | grep root``` to see what processes are running as root and found 
+Then I executed this command ```ps aux | grep root``` to see what processes are running as root and found 
 
 ```
 root       4871  0.0  0.0      0     0 ?        S<   06:07   0:00 [xfs-reclaim/sda]
@@ -176,7 +174,7 @@ tcp   LISTEN     0      50                     ::ffff:127.0.0.1:9600            
 
 And we can see kibana service is running on port 5601 localhost so now we shall look for any public exploits to priv esc
 
-## Pivoting to Kibana user
+## Pivoting to Kibana
 
 So from quick google search ```kibana exploit``` i found [this](https://github.com/mpgn/CVE-2018-17246)
 
