@@ -73,7 +73,7 @@ On port 9200 Elastic Search is running so let's quickly find out all the indices
 <br/>
 <selection 008>
 <br/>
-We got 3 indices so from which ```.kibana``` is the default of elastic search so we will enumerate b/w  ```bank``` and ```quotes``` 
+We got 3 indices so from which ```kibana``` is the default of elastic search so we will enumerate b/w  ```bank``` and ```quotes``` 
 
 ### Finding the "Key"
 
