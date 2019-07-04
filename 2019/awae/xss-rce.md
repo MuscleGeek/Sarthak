@@ -135,3 +135,65 @@ Anything which is being passed to ```id``` parameter will be converted to intege
 
 See that error now we know why it's happening so let's move forward ...
 
+We shall see which file is handling those comments and to see that i will intercept with burp ...
+
+<br/>
+<<selection 008>>
+<br/>
+File which is handling the comments is ```post_comment.php``` So let's analyse it...
+
+### post_comment.php
+
+**Source Code**
+```php
+<?php
+  $site = "PentesterLab vulnerable blog";
+  require "header.php";
+  $post = Post::find(intval($_GET['id']));
+  if (isset($post)) {
+    $ret = $post->add_comment();
+  }
+  header("Location: post.php?id=".intval($_GET['id']));
+  die();
+?>
+
+```
+On first look we can see again the ```classes\post.php```  was used and the functions were ```find``` as well as ```add_comment()```
+
+Let's analyse both functions ...
+
+**Find function**
+
+```php
+function find($id) {
+    $result = mysql_query("SELECT * FROM posts where id=".$id);
+    $row = mysql_fetch_assoc($result); 
+    if (isset($row)){
+      $post = new Post($row['id'],$row['title'],$row['text'],$row['published']);
+    }
+    return $post;
+  
+  }
+```
+
+We can see that this function is taking id parameter as argument and checking it if exists then after validiating it exists it's creating a object of ```Post``` class and passing the values to the constructor
+
+***Constuctor***
+
+```php
+class Post{
+  public $id, $title, $text, $published;
+  function __construct($id, $title, $text, $published){
+    $this->title= $title;
+    $this->text = $text;
+    $this->published= $published;
+    $this->id = $id;
+  }
+```
+We can see that this is accepting the values and assigning them to the local variables of this object...
+
+Where the variables are the values which were passed from the comment section...<br/>
+***Burpsuite captured***
+```
+title=test&author=sarthak&text=hello+world++++++++&submit=Submit
+```
