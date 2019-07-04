@@ -285,7 +285,7 @@ output {
 
 It basically executing the command which it received in that ```logstash_*``` file ...
 
-#### Payload creation 
+### Payload creation 
 
 So let's create a payload which will match the conditions of ```input.conf``` 
 
@@ -310,7 +310,7 @@ bash-4.2$
 
 Now we wait for some time  also i noticed that if your payload doesn't work create another file with ```logstash_``` in the start but change the end part everytime, i might be wrong but whenever i tried to create same file again my payload will not execute...
 
-#### Root-Shell
+## Root-Shell
 
 ```
 [security@haystack tmp]$ su root
