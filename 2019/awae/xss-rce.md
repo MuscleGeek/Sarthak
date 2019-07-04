@@ -791,7 +791,9 @@ setTimeout(function() {
 So this is how admin would be impersonated
 
 ## Demo
-<br/>
+<br />
+
 ![](demo.gif)
+
 <br/>
 I hope you guys would like this article ... i will post more as soon as i get more time :)
