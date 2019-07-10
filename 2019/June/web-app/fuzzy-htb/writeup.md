@@ -6,7 +6,8 @@ Welcome Readers, Today we will be doing the hackthebox(HTB) challenge
 
 We have this nice website in front of us..
 
-<<selection 007>>
+![](Selection_007.png)
+
 <br/>
 
 Let's start off with our basic gobuster..
@@ -74,7 +75,9 @@ Gobuster v2.0.1              OJ Reeves (@TheColonial)
 We found the ```action.php``` Let's see what we have on this one ...
 
 <br/>
-<selection 008>
+
+![](Selection_008.png)
+
 <br/>
 
 ```
@@ -121,7 +124,9 @@ Requests/sec.: 51.17877
 Now we have found our parameter which is ```reset``` let's see what this parameter gives us ...
 
 <br/>
-<selection 009>
+
+![](Selection_009.png)
+
 <br/>
 
 ```
@@ -167,9 +172,11 @@ URL:-http://docker.hackthebox.eu:42566/api/action.php?reset=20
 ### OUTPUT
 
 <br/>
-<selection 010>
+
+![](Selection_010.png)
+
 <br/>
 
-And we got the flag :)
+And we got the flag ..it was a nice little challenge thanx to my friend [stephen](http://web.archive.org/web/20190421032826im_/https://ppfactory.tk/wp-content/uploads/2019/02/IMG_20181231_001959_644.jpg) with whom i solved this challenge :)
 <br/>
 Thank you guys if you like this writeup stay tuned for more !!
