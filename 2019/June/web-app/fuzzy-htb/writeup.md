@@ -1,6 +1,6 @@
 # Fuzzy (HackTheBox) (WEB-APP Challenge)
 
-Welcome Readers, Today we will be doing the hackthebox(HTB) challenge
+Welcome Readers, Today we will be doing the hack the box (HTB) challenge
 
 # Finding the Page
 
